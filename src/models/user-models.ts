@@ -1,7 +1,7 @@
 import {UserResponseFromDBType, UserResponseType} from "../types/types";
 
-export const userModels = (users: UserResponseFromDBType[]): UserResponseType | UserResponseType[] => {
-    const postConverter = (user: UserResponseFromDBType) => {
+export const userModels = (users: UserResponseFromDBType[] | UserResponseFromDBType): UserResponseType | UserResponseType[] => {
+    const userConverter = (user: UserResponseFromDBType) => {
         return {
             id: user.id,
             login: user.login,
@@ -11,8 +11,8 @@ export const userModels = (users: UserResponseFromDBType[]): UserResponseType | 
     }
 
     if (Array.isArray(users)) {
-        return users.map((u: UserResponseFromDBType) => postConverter(u))
+        return users.map((u: UserResponseFromDBType) => userConverter(u))
     }
 
-    return postConverter(users)
+    return userConverter(users)
 }

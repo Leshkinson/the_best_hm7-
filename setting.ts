@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 app.use('/posts', postsRouter)
 app.use('/blogs', blogsRouter)
 app.use('/users', userRouter)
-app.use('/auth/login', authRouter)
+app.use('/auth', authRouter)
 app.use('/comments', commentRouter)
 
 //---TEST---//
