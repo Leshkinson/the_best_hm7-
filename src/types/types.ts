@@ -12,9 +12,29 @@ export type UserResponseType = UserType & {
     createdAt: string
 }
 
+type AccountDataType = {
+    userName: string,
+    email: string,
+    createdAt: string
+    hash: string
+    salt: string
+}
+
+type EmailConformationType = {
+    confirmationCode: string
+    expirationDate: Date,
+    isConfirmed: boolean
+}
+
 export type UserResponseFromDBType = UserResponseType & {
     hash: string
     salt: string
+}
+
+export type UserFromDBType = {
+    id: string,
+    accountData : AccountDataType,
+    emailConformation : EmailConformationType
 }
 
 export type PostType = {

@@ -125,7 +125,6 @@ describe('comment_test', () => {
 
 
     it('DELETE, try delete comment other user', async ()=>{
-        console.log('test213', 'comments/' + comment.id)
         await request(app)
             .delete('/comments/' + comment.id)
             .auth(token_second_user, {type: "bearer"})
@@ -133,7 +132,6 @@ describe('comment_test', () => {
     })
 
     it('DELETE, delete own comment', async ()=>{
-        console.log('test213', 'comments/' + comment.id)
         await request(app)
             .delete('/comments/' + comment.id)
             .auth(token_first_user, {type: "bearer"})

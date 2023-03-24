@@ -16,12 +16,21 @@ export const userRepository = {
         return await userCollections.findOne(filter)
     },
 
+    async getUserByConfirmationCode(filter: any){
+        return await userCollections.findOne(filter)
+    },
+
     async getTotalCount(filter: any): Promise<number> {
         return await userCollections.countDocuments(filter)
     },
 
     async createUser(newUser: any): Promise<void> {
         await userCollections.insertOne(newUser)
+    },
+
+    async changeUser(id: { id: string }, update: { $set: any }){
+        const result = await userCollections.updateOne(id, update)
+        return (result.matchedCount === 1);
     },
 
     async deleteUser(filter: any): Promise<boolean> {

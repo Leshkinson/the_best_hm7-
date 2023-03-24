@@ -1,7 +1,6 @@
 import {
     QueryForUsersType,
     ResponseTypeWithPages,
-    UserRequestType,
     UserResponseFromDBType,
     UserResponseType
 } from "../types/types";
@@ -41,7 +40,7 @@ export const userService = {
         return await userRepository.getUserByLoginOrEmail(filter)
     },
 
-    async createUser(user: UserRequestType): Promise<UserResponseType> {
+    async createUser(user: any): Promise<UserResponseType> {
         const id = createId()
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(user.password, salt)

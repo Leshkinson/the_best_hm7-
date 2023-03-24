@@ -26,15 +26,18 @@ export const authController = {
     },
 
     async registration(req: Request, res: Response) {
-
+        await authService.registration(req.body)
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     },
 
     async registrationConfirmation(req: Request, res: Response) {
-
+        const isRegistration = await authService.registrationConfirmation(req.body.code)
+        isRegistration ? res.sendStatus(HTTP_STATUSES.NO_CONTENT_204) : res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
     },
 
     async regEmailResend(req: Request, res: Response) {
-
+        const isEmailSend = await authService.regEmailResend(req.body.email)
+        isEmailSend ? res.sendStatus(HTTP_STATUSES.NO_CONTENT_204) : res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
     },
 
 

@@ -1,5 +1,5 @@
 export const getFilter = (params: any, withRegex:boolean = false) => {
-    const filter: any = {}
+    let filter: any = {}
     const validParams:any = {}
     const filterCheck = (p: any) => !!p
 
@@ -16,7 +16,7 @@ export const getFilter = (params: any, withRegex:boolean = false) => {
     if(arrKeys.length === 1) {
         const singleKey = arrKeys[0]
         if(withRegex)   filter[singleKey] = {$regex: new RegExp(`${validParams[singleKey]}`, 'i')}
-        else filter[singleKey] = {singleKey: validParams[singleKey]
+        else filter = {[singleKey]: validParams[singleKey]
         }
     }
      return filter
