@@ -3,7 +3,7 @@ import {authController} from "../controllers/auth-controller";
 import {inputValidationMiddleware} from "../middleware/input-validation-middleware";
 import {
     authValidation,
-    checkCodeValidation, checkIsRegistrationUser,
+    checkCodeValidation,
     checkIsValidUser,
     regEmailResendValidation, registrationValidate
 } from "../validators/auth-validation";
@@ -15,7 +15,7 @@ export const authRouter = Router({})
 authRouter.get('/me', authMiddleware, authController.getMe)
 //-------------------POST---------------//
 authRouter.post('/login', authValidation, checkIsValidUser, inputValidationMiddleware, authController.authorization)
-authRouter.post('/registration', registrationValidate, checkIsRegistrationUser, inputValidationMiddleware, authController.registration)
+authRouter.post('/registration', registrationValidate,  inputValidationMiddleware, authController.registration)
 authRouter.post('/registration-confirmation', checkCodeValidation, inputValidationMiddleware, authController.registrationConfirmation)
 authRouter.post('/registration-email-resending', regEmailResendValidation, inputValidationMiddleware, authController.regEmailResend)
 

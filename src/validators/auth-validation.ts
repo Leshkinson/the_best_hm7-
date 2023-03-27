@@ -3,6 +3,7 @@ import {NextFunction, Request, Response} from "express";
 import {userService} from "../services/user-service";
 import bcrypt from "bcrypt";
 import {HTTP_STATUSES} from "../http_statuses";
+import {blogService} from "../services/blog-service";
 
 const emailPattern = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 export const checkIsValidUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +44,13 @@ const loginValidation = body('login')
     .trim()
     .isLength({min: 1, max: 25}).withMessage('Not correct length')
     .notEmpty().withMessage('Field must not be empty')
+    .custom(async value => {
+        const isUserExists = await userService.getUserByLoginOrEmail(value)
+        if(!isUserExists) {
+            throw new Error();
+        }
+        return false
+    }).withMessage('Login exists!')
 
 const passwordValidation = body('password')
     .isString().withMessage('Invalid type')
@@ -60,8 +68,16 @@ const emailValidation = body('email')
     .trim()
     .custom(value => emailPattern.test(value)).withMessage('Is not email!')
     .notEmpty().withMessage('Field must not be empty')
+    .custom(async value => {
+        const isUserExists = await userService.getUserByLoginOrEmail(value)
+        if(!isUserExists) {
+            throw new Error();
+        }
+        return false
+    }).withMessage('Email exists!')
 
 export const authValidation = [loginOrEmailValidation, passwordValidation]
-export const registrationValidate = [loginValidation, passwordValidation, emailValidation]
 export const checkCodeValidation = [codedValidation]
 export const regEmailResendValidation = [emailValidation]
+
+export const registrationValidate = [loginValidation, passwordValidation, emailValidation]
