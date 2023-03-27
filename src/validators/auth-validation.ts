@@ -47,7 +47,7 @@ const loginValidation = body('login')
     .notEmpty().withMessage('Field must not be empty')
     .custom(async value => {
         const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.userName": value})
-        if(!isUserExists) {
+        if(isUserExists) {
             throw new Error();
         }
         return false
@@ -71,7 +71,7 @@ const emailValidation = body('email')
     .notEmpty().withMessage('Field must not be empty')
     .custom(async value => {
         const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
-        if(!isUserExists) {
+        if(isUserExists) {
             throw new Error();
         }
         return false
