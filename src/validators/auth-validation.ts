@@ -56,7 +56,7 @@ const loginValidation = body('login')
 const passwordValidation = body('password')
     .isString().withMessage('Invalid type')
     .trim()
-    .isLength({min: 1, max: 25}).withMessage('Not correct length')
+    .isLength({min: 6 , max: 20}).withMessage('Not correct length')
     .notEmpty().withMessage('Field must not be empty')
 
 const codedValidation = body('code')
