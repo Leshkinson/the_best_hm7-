@@ -11,8 +11,10 @@ export const authService = {
 
     async registration(userData: UserRequestType) {
         const id = createId()
+        console.log('test for render', userData)
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(userData.password, salt)
+        console.log('test for render',salt, hash)
         const generatedCode = uuidv4()
         const newUser: UserFromDBType = {
             id,
@@ -32,7 +34,6 @@ export const authService = {
             }
         }
         const text = getTextForRegistration(generatedCode)
-        console.log('test123', text)
 
 
         await emailManager.sendEmailConfirmationMessage(userData.email, "DmitriСorporate", text)
