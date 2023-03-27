@@ -15,9 +15,9 @@ export const authRouter = Router({})
 authRouter.get('/me', authMiddleware, authController.getMe)
 //-------------------POST---------------//
 authRouter.post('/login', authValidation, checkIsValidUser, inputValidationMiddleware, authController.authorization)
-authRouter.post('/registration', registrationValidate, checkIsRegistrationUser, authController.registration)
-authRouter.post('/registration-confirmation', checkCodeValidation, authController.registrationConfirmation)
-authRouter.post('/registration-email-resending', regEmailResendValidation, authController.regEmailResend)
+authRouter.post('/registration', registrationValidate, checkIsRegistrationUser, inputValidationMiddleware, authController.registration)
+authRouter.post('/registration-confirmation', checkCodeValidation, inputValidationMiddleware, authController.registrationConfirmation)
+authRouter.post('/registration-email-resending', regEmailResendValidation, inputValidationMiddleware, authController.regEmailResend)
 
 // для registration-email-resending, дописать провекру, что если у пользователя подтвержденый статус не отправлять письмо повторно
 // registration-confirmation - тоже проверять статус
