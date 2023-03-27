@@ -6,8 +6,6 @@ import add from 'date-fns/add'
 import {emailManager} from "../application/emailManager";
 import {userRepository} from "../repositories/user-repositpry";
 import {getTextForRegistration} from "../utils/getTextForRegistration";
-import {blogService} from "./blog-service";
-
 
 export const authService = {
 
