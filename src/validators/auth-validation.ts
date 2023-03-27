@@ -43,7 +43,7 @@ const loginOrEmailValidation = body('loginOrEmail')
 const loginValidation = body('login')
     .isString().withMessage('Invalid type')
     .trim()
-    .isLength({min: 1, max: 25}).withMessage('Not correct length')
+    .isLength({min: 3, max: 10}).withMessage('Not correct length')
     .notEmpty().withMessage('Field must not be empty')
     .custom(async value => {
         const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.userName": value})
