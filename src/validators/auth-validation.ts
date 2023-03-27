@@ -84,16 +84,16 @@ const emailIsExist = body('email')
             throw new Error();
         }
         return false
-    }).withMessage('Email exists!')
+    }).withMessage('Email exist!')
 
 const emailIsNotExist = body('email')
     .custom(async value => {
         const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
-        if(isUserExists) {
+        if(!isUserExists) {
             throw new Error();
         }
         return false
-    }).withMessage('Email exists!')
+    }).withMessage('Email is not exist!')
 
 export const authValidation = [loginOrEmailValidation, passwordValidation]
 export const checkCodeValidation = [codedValidation]

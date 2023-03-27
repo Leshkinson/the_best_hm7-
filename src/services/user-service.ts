@@ -1,6 +1,6 @@
 import {
     QueryForUsersType,
-    ResponseTypeWithPages,
+    ResponseTypeWithPages, UserFromDBType,
     UserResponseFromDBType,
     UserResponseType
 } from "../types/types";
@@ -11,6 +11,8 @@ import bcrypt from "bcrypt";
 import {userModels} from "../models/user-models";
 import {Sort} from "mongodb";
 import {getFilter} from "../utils/getFilter";
+import add from "date-fns/add";
+import {v4 as uuidv4} from "uuid";
 
 
 export const userService = {
@@ -48,14 +50,32 @@ export const userService = {
         const id = createId()
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(user.password, salt)
-        const newUser: UserResponseType = {
+        const generatedCode = uuidv4()
+        const createDate  =  new Date().toISOString()
+        const newUser: UserFromDBType = {
+            id,
+            accountData: {
+                userName: user.login,
+                email: user.email,
+                hash,
+                salt,
+                createdAt: createDate,
+            },
+            emailConformation: {
+                confirmationCode: generatedCode,
+                expirationDate: add(new Date(), {
+                    minutes: 3
+                }),
+                isConfirmed: true
+            }
+        }
+        await userRepository.createUser(newUser)
+        return {
             id,
             login: user.login,
             email: user.email,
-            createdAt: new Date().toISOString(),
+            createdAt: createDate
         }
-        await userRepository.createUser({...newUser, hash, salt} as UserResponseFromDBType)
-        return newUser
     },
 
     async deleteUser(id: string): Promise<boolean> {
