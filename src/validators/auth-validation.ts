@@ -3,6 +3,7 @@ import {NextFunction, Request, Response} from "express";
 import {userService} from "../services/user-service";
 import bcrypt from "bcrypt";
 import {HTTP_STATUSES} from "../http_statuses";
+
 const emailPattern = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 export const checkIsValidUser = async (req: Request, res: Response, next: NextFunction) => {
     const user = await userService.getUserByLoginOrEmail(req.body.loginOrEmail)
@@ -22,8 +23,13 @@ export const checkIsValidUser = async (req: Request, res: Response, next: NextFu
     next()
 }
 
-export const checkIsRegistrationUser = () => {
-
+export const checkIsRegistrationUser = async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userService.getUserByLoginOrEmail(req.body.login, req.body.email)
+    if(user){
+        res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+        return
+    }
+    next()
 }
 
 const loginOrEmailValidation = body('loginOrEmail')
@@ -50,5 +56,6 @@ const emailValidation = body('email')
     .notEmpty().withMessage('Field must not be empty')
 
 export const authValidation = [loginOrEmailValidation, passwordValidation]
+export const registrationValidate = [loginOrEmailValidation, passwordValidation, emailValidation]
 export const checkCodeValidation = [codedValidation]
 export const regEmailResendValidation = [emailValidation]

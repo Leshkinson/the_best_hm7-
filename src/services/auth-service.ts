@@ -1,4 +1,4 @@
-import {UserFromDBType, UserRequestType} from "../types/types";
+import {CommentResponseType, UserFromDBType, UserRequestType} from "../types/types";
 import {createId} from "../utils/createId";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from 'uuid';
@@ -6,6 +6,7 @@ import add from 'date-fns/add'
 import {emailManager} from "../application/emailManager";
 import {userRepository} from "../repositories/user-repositpry";
 import {getTextForRegistration} from "../utils/getTextForRegistration";
+import {blogService} from "./blog-service";
 
 
 export const authService = {
@@ -44,7 +45,9 @@ export const authService = {
             "emailConformation.confirmationCode": code
         }
         const user = await userRepository.getUserByConfirmationCode(filter)
-        if (user) {
+        // @ts-ignore // не будет ругаться после того как перепишу полностю типы и юзеров
+        if (user && !user.emailConformation.isConfirmed) {
+
             const update = {
                 $set: {"emailConformation.isConfirmed": true}
             }
@@ -58,7 +61,8 @@ export const authService = {
     async regEmailResend(email: string) {
         const filter: any = {'accountData.email': email}
         const user = await userRepository.getUserByLoginOrEmail(filter)
-        if (user) {
+        // @ts-ignore // не будет ругаться после того как перепишу полностю типы и юзеров
+        if (user && !user.emailConformation.isConfirmed) {
             const generatedCode = uuidv4()
             const text = getTextForRegistration(generatedCode)
             const update = {

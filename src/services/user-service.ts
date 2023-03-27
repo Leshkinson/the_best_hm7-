@@ -35,8 +35,12 @@ export const userService = {
         return await userRepository.getUserById(filter)
     },
 
-    async getUserByLoginOrEmail(loginOrEmail: string): Promise<UserResponseFromDBType | null> {
-        const filter: any = getFilter({login: loginOrEmail, email: loginOrEmail})
+    async getUserByLoginOrEmail(loginOrEmail: string, email?: string): Promise<UserResponseFromDBType | null> {
+        const filter: any = getFilter({
+            "accountData.userName": loginOrEmail,
+            "accountData.email": email || loginOrEmail
+        })
+
         return await userRepository.getUserByLoginOrEmail(filter)
     },
 
