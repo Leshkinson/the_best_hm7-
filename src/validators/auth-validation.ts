@@ -38,6 +38,12 @@ const loginOrEmailValidation = body('loginOrEmail')
     .isLength({min: 1, max: 25}).withMessage('Not correct length')
     .notEmpty().withMessage('Field must not be empty')
 
+const loginValidation = body('login')
+    .isString().withMessage('Invalid type')
+    .trim()
+    .isLength({min: 1, max: 25}).withMessage('Not correct length')
+    .notEmpty().withMessage('Field must not be empty')
+
 const passwordValidation = body('password')
     .isString().withMessage('Invalid type')
     .trim()
@@ -56,6 +62,6 @@ const emailValidation = body('email')
     .notEmpty().withMessage('Field must not be empty')
 
 export const authValidation = [loginOrEmailValidation, passwordValidation]
-export const registrationValidate = [loginOrEmailValidation, passwordValidation, emailValidation]
+export const registrationValidate = [loginValidation, passwordValidation, emailValidation]
 export const checkCodeValidation = [codedValidation]
 export const regEmailResendValidation = [emailValidation]
