@@ -71,6 +71,7 @@ const codedValidation = body('code')
         return false
     }).withMessage("Code isn't exists!")
 
+
 const emailValidation = body('email')
     .isString().withMessage('Invalid type')
     .trim()
