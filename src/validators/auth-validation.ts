@@ -6,7 +6,7 @@ import {HTTP_STATUSES} from "../http_statuses";
 import {blogService} from "../services/blog-service";
 import {userRepository} from "../repositories/user-repositpry";
 
-const emailPattern = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
+const emailPattern = new RegExp(/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/);
 export const checkIsValidUser = async (req: Request, res: Response, next: NextFunction) => {
     const user = await userService.getUserByLoginOrEmail(req.body.loginOrEmail)
     if (!user) {
@@ -65,7 +65,7 @@ const codedValidation = body('code')
     .notEmpty().withMessage('Field must not be empty')
     .custom(async value => {
         const isUserExists = await userRepository.getUserByLoginOrEmail({ "emailConformation.confirmationCode": value})
-        if(isUserExists) {
+        if(!isUserExists) {
             throw new Error();
         }
         return false
@@ -76,6 +76,17 @@ const emailValidation = body('email')
     .trim()
     .custom(value => emailPattern.test(value)).withMessage('Is not email!')
     .notEmpty().withMessage('Field must not be empty')
+
+const emailIsExist = body('email')
+    .custom(async value => {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
+        if(isUserExists) {
+            throw new Error();
+        }
+        return false
+    }).withMessage('Email exists!')
+
+const emailIsNotExist = body('email')
     .custom(async value => {
         const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
         if(isUserExists) {
@@ -86,6 +97,6 @@ const emailValidation = body('email')
 
 export const authValidation = [loginOrEmailValidation, passwordValidation]
 export const checkCodeValidation = [codedValidation]
-export const regEmailResendValidation = [emailValidation]
+export const regEmailResendValidation = [emailValidation, emailIsNotExist]
 
-export const registrationValidate = [loginValidation, passwordValidation, emailValidation]
+export const registrationValidate = [loginValidation, passwordValidation, emailValidation, emailIsExist]
