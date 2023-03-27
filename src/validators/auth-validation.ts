@@ -6,7 +6,7 @@ import {HTTP_STATUSES} from "../http_statuses";
 import {blogService} from "../services/blog-service";
 import {userRepository} from "../repositories/user-repositpry";
 
-const emailPattern = new RegExp(/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/);
+const emailPattern = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
 export const checkIsValidUser = async (req: Request, res: Response, next: NextFunction) => {
     const user = await userService.getUserByLoginOrEmail(req.body.loginOrEmail)
     if (!user) {
