@@ -32,6 +32,7 @@ export const authService = {
             }
         }
         const text = getTextForRegistration(generatedCode)
+        console.log('test123', text)
 
 
         await emailManager.sendEmailConfirmationMessage(userData.email, "DmitriСorporate", text)
