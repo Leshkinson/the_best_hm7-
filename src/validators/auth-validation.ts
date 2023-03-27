@@ -21,6 +21,11 @@ export const checkIsValidUser = async (req: Request, res: Response, next: NextFu
     }
     next()
 }
+
+export const checkIsRegistrationUser = () => {
+
+}
+
 const loginOrEmailValidation = body('loginOrEmail')
     .isString().withMessage('Invalid type')
     .trim()

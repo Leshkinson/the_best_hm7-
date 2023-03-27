@@ -1,10 +1,11 @@
-import {UserFromDBType, UserRequestType, UserResponseFromDBType, UserResponseType} from "../types/types";
+import {UserFromDBType, UserRequestType} from "../types/types";
 import {createId} from "../utils/createId";
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from 'uuid';
 import add from 'date-fns/add'
 import {emailManager} from "../application/emailManager";
 import {userRepository} from "../repositories/user-repositpry";
+import {getTextForRegistration} from "../utils/getTextForRegistration";
 
 
 export const authService = {
@@ -31,16 +32,9 @@ export const authService = {
                 isConfirmed: false
             }
         }
-        const href = `https://somesite.com/confirm-email?code=${generatedCode}`
+        const text = getTextForRegistration(generatedCode)
 
-        const text = "<h1>Thank for your registration</h1>\n" +
-            `${generatedCode}`
-            +
-            "       <p>My code(generatedCode) To finish registration please follow the link below:\n" +
-            "          <a href={href}>complete registration</a>\n" +
-            "      </p>"
-
-        await emailManager.sendEmailConfirmationMessage(userData.email, "DmitriCorpareted", text)
+        await emailManager.sendEmailConfirmationMessage(userData.email, "DmitriСorporate", text)
         await userRepository.createUser(newUser)
     },
 
@@ -66,17 +60,12 @@ export const authService = {
         const user = await userRepository.getUserByLoginOrEmail(filter)
         if (user) {
             const generatedCode = uuidv4()
-            const text = "<h1>Thank for your registration</h1>\n" +
-                `${generatedCode}`
-                +
-                "       <p>My code(generatedCode) To finish registration please follow the link below:\n" +
-                "          <a href={href}>complete registration</a>\n" +
-                "      </p>"
+            const text = getTextForRegistration(generatedCode)
             const update = {
                 $set: {'emailConformation.confirmationCode': generatedCode}
             }
             await userRepository.changeUser({id: user.id}, update)
-            await emailManager.sendEmailConfirmationMessage(email, "DmitriCorpareted", text)
+            await emailManager.sendEmailConfirmationMessage(email, "DmitriСorporate", text)
             return true
         }
         return false
