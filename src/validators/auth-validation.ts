@@ -63,6 +63,13 @@ const codedValidation = body('code')
     .isString().withMessage('Invalid type')
     .trim()
     .notEmpty().withMessage('Field must not be empty')
+    .custom(async value => {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({ "emailConformation.confirmationCode": value})
+        if(isUserExists) {
+            throw new Error();
+        }
+        return false
+    }).withMessage("Code isn't exists!")
 
 const emailValidation = body('email')
     .isString().withMessage('Invalid type')
