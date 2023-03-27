@@ -1,11 +1,10 @@
 
 
-export const getTextForRegistration = (code: string) => {
-    const href = `https://somesite.com/confirm-email?code=${code}`
+export const getTextForRegistration = (generatedCode: string) => {
     return "<h1>Thank for your registration</h1>\n" +
-        `${code}` //удалить
+        `${generatedCode}` //удалить
         +
-        "       <p>My code(generatedCode) To finish registration please follow the link below:\n" +
-        "          <a href={href}>complete registration</a>\n" +
+        "       <p> To finish registration please follow the link below:\n" +
+        "          <a href='https://somesite.com/confirm-email?code=${generatedCode}'>complete registration</a>\n" +
         "      </p>"
 }

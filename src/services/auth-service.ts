@@ -33,6 +33,7 @@ export const authService = {
         }
         const text = getTextForRegistration(generatedCode)
 
+
         await emailManager.sendEmailConfirmationMessage(userData.email, "DmitriСorporate", text)
         await userRepository.createUser(newUser)
     },
