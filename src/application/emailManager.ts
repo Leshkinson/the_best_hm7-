@@ -6,7 +6,10 @@ export const emailManager = {
 
     async sendEmailConfirmationMessage(email: string, subject: string, text: string) {
         let transport = nodemailer.createTransport({
-            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 587, // 587
+            secure: false,
+            //service: "gmail",
             auth: {
                 user: 'dmitri.aleks.work@gmail.com',
                 pass: 'mygopuwhdfclsjvz'
