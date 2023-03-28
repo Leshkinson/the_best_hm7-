@@ -13,8 +13,10 @@ export const checkIsValidUser = async (req: Request, res: Response, next: NextFu
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
-    const hash = await bcrypt.hash(req.body.password, user.salt)
-    if (hash !== user.hash) {
+    // @ts-ignore
+    const hash = await bcrypt.hash(req.body.password, user.accountData.salt)
+    // @ts-ignore
+    if (hash !== user.accountData.hash) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
