@@ -3,7 +3,6 @@ import {NextFunction, Request, Response} from "express";
 import {userService} from "../services/user-service";
 import bcrypt from "bcrypt";
 import {HTTP_STATUSES} from "../http_statuses";
-import {blogService} from "../services/blog-service";
 import {userRepository} from "../repositories/user-repositpry";
 
 const emailPattern = new RegExp('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$');
@@ -29,7 +28,7 @@ export const checkIsValidUser = async (req: Request, res: Response, next: NextFu
 
 export const checkIsRegistrationUser = async (req: Request, res: Response, next: NextFunction) => {
     const user = await userService.getUserByLoginOrEmail(req.body.login, req.body.email)
-    if(user){
+    if (user) {
         res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
         return
     }
@@ -48,17 +47,18 @@ const loginValidation = body('login')
     .isLength({min: 3, max: 10}).withMessage('Not correct length')
     .notEmpty().withMessage('Field must not be empty')
     .custom(async value => {
-        const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.userName": value})
-        if(isUserExists) {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({"accountData.userName": value})
+        if (isUserExists) {
             throw new Error();
         }
         return false
     }).withMessage('Login exists!')
+let isConfirmed: any
 
 const passwordValidation = body('password')
     .isString().withMessage('Invalid type')
     .trim()
-    .isLength({min: 6 , max: 20}).withMessage('Not correct length')
+    .isLength({min: 6, max: 20}).withMessage('Not correct length')
     .notEmpty().withMessage('Field must not be empty')
 
 const codedValidation = body('code')
@@ -66,12 +66,14 @@ const codedValidation = body('code')
     .trim()
     .notEmpty().withMessage('Field must not be empty')
     .custom(async value => {
-        const isUserExists = await userRepository.getUserByLoginOrEmail({ "emailConformation.confirmationCode": value})
-        if(!isUserExists) {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({"emailConformation.confirmationCode": value})
+        // @ts-ignore
+        isConfirmed = isUserExists?.emailConformation?.isConfirmed
+        if (!isUserExists || isConfirmed) {
             throw new Error();
         }
         return false
-    }).withMessage("Code isn't exists!")
+    }).withMessage(() => isConfirmed ? "Already confirmed" : "Code isn't exists!")
 
 
 const emailValidation = body('email')
@@ -82,8 +84,8 @@ const emailValidation = body('email')
 
 const emailIsExist = body('email')
     .custom(async value => {
-        const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
-        if(isUserExists) {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({"accountData.email": value})
+        if (isUserExists) {
             throw new Error();
         }
         return false
@@ -91,8 +93,8 @@ const emailIsExist = body('email')
 
 const emailIsNotExist = body('email')
     .custom(async value => {
-        const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
-        if(!isUserExists) {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({"accountData.email": value})
+        if (!isUserExists) {
             throw new Error();
         }
         return false
@@ -100,9 +102,9 @@ const emailIsNotExist = body('email')
 
 const emailIsConfirmed = body('email')
     .custom(async value => {
-        const isUserExists = await userRepository.getUserByLoginOrEmail({ "accountData.email": value})
-      // @ts-ignore
-        if(isUserExists && isUserExists?.emailConformation?.isConfirmed) {
+        const isUserExists = await userRepository.getUserByLoginOrEmail({"accountData.email": value})
+        // @ts-ignore
+        if (isUserExists && isUserExists?.emailConformation?.isConfirmed) {
             throw new Error();
         }
         return false
