@@ -89,9 +89,7 @@ describe('/test_blogs_path_2', () => {
 
     it('GET, try should return blog by id', async () => {
         await request(app)
-            //@ts-ignore
             .get('/blogs/' + firstElement.id)
-            //@ts-ignore
             .expect(HTTP_STATUSES.OK200, blogModels({...firstElement}))
     })
 

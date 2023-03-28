@@ -45,10 +45,9 @@ export const authService = {
         const filter: any = {
             "emailConformation.confirmationCode": code
         }
-        const user = await userRepository.getUserByConfirmationCode(filter)
-        // @ts-ignore // не будет ругаться после того как перепишу полностю типы и юзеров
-        if (user && !user.emailConformation.isConfirmed) {
+        const user = await userRepository.getUserByFilter(filter)
 
+        if (user && !user.emailConformation.isConfirmed) {
             const update = {
                 $set: {"emailConformation.isConfirmed": true}
             }
@@ -61,8 +60,8 @@ export const authService = {
 
     async regEmailResend(email: string) {
         const filter: any = {'accountData.email': email}
-        const user = await userRepository.getUserByLoginOrEmail(filter)
-        // @ts-ignore // не будет ругаться после того как перепишу полностю типы и юзеров
+        const user = await userRepository.getUserByFilter(filter)
+
         if (user && !user.emailConformation.isConfirmed) {
             const generatedCode = uuidv4()
             const text = getTextForRegistration(generatedCode)

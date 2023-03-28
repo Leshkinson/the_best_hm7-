@@ -34,7 +34,7 @@ export const postService = {
 
     async getPostById(id: string): Promise<PostResponseType | null> {
         const filter = {id}
-        const post = await postRepository.getPostById(filter)
+        const post = await postRepository.getPostByFilter(filter)
         if (post) {
             return postModels(post) as PostResponseType
         }

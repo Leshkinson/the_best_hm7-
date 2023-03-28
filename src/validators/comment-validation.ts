@@ -16,7 +16,6 @@ export const checkIsUserOwnerComment = async (req: Request, res: Response, next:
         res.sendStatus(HTTP_STATUSES.FORBIDDEN_403)
         return
     }
-    //@ts-ignore
     next()
 }
 

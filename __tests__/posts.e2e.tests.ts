@@ -83,7 +83,6 @@ describe('test_posts_path_2', () => {
     }
 
     beforeAll(async () => {
-        //@ts-ignore // ошибка типизации выше, изначально создание блога принимает 3 параметра
         await blogService.createBlog({
             "name": "somename",
             "websiteUrl": "https://milanac.ru/",

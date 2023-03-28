@@ -19,7 +19,4 @@ authRouter.post('/registration', registrationValidate,  inputValidationMiddlewar
 authRouter.post('/registration-confirmation', checkCodeValidation, inputValidationMiddleware, authController.registrationConfirmation)
 authRouter.post('/registration-email-resending', regEmailResendValidation, inputValidationMiddleware, authController.regEmailResend)
 
-// для registration-email-resending, дописать провекру, что если у пользователя подтвержденый статус не отправлять письмо повторно
-// registration-confirmation - тоже проверять статус
-// login проверять при авторизации статус, если не авторизован, отправлять писбмо
 

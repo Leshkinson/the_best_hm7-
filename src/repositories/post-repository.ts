@@ -8,7 +8,7 @@ export const postRepository = {
         return postCollections.find(filter).sort(sort).skip(skip).limit(limit).toArray()
     },
 
-    getPostById(id: { id: string }): Promise<PostResponseType | null> {
+    getPostByFilter(id: { id: string }): Promise<PostResponseType | null> {
         return postCollections.findOne(id)
     },
 

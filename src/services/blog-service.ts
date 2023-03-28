@@ -34,7 +34,7 @@ export const blogService = {
 
     async getBlogById(id: string) {
         const filter = {id}
-        const blog = await blogRepository.getBlogById(filter)
+        const blog = await blogRepository.getBlogByFilter(filter)
         if (blog) {
             return blogModels(blog)
         }

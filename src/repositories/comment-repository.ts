@@ -5,7 +5,7 @@ import {Sort} from "mongodb";
 
 export const commentRepository = {
 
-    async getCommentById(filter: { id: string }): Promise<CommentResponseFromDBType | null> {
+    async getCommentByFilter(filter: { id: string }): Promise<CommentResponseFromDBType | null> {
         return commentCollections.findOne(filter)
     },
 

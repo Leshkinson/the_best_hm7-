@@ -8,7 +8,7 @@ export const blogRepository = {
         return await blogCollections.find(filter).sort(sort).skip(skip).limit(limit).toArray()
     },
 
-    async getBlogById(filter: { id: string }): Promise<BlogResponseType | null> {
+    async getBlogByFilter(filter: { id: string }): Promise<BlogResponseType | null> {
         return blogCollections.findOne(filter)
     },
 

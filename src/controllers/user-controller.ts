@@ -16,7 +16,7 @@ export const userController = {
     async getAllUsers(req: Request, res: Response) {
         const query = {
             ...getPageQuery(req.query, DEFAULT_VALUE_LIST),
-            login: req.query.searchLoginTerm as string || "",
+            userName: req.query.searchLoginTerm as string || "",
             email: req.query.searchEmailTerm as string || ""
         }
         const users = await userService.getAllUsers(query)

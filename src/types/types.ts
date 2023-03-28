@@ -92,7 +92,7 @@ export type QueryForBlogsType = QueryPageType & {
     name: string
 }
 export type QueryForUsersType = QueryPageType & {
-    login: string
+    userName: string
     email: string
 }
 

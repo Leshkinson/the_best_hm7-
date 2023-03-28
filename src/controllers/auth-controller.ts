@@ -12,8 +12,8 @@ export const authController = {
         let user = {}
         if (req.content.user) {
             user = {
-                "email": req.content.user.email,
-                "login": req.content.user.login,
+                "email": req.content.user.accountData.email,
+                "login": req.content.user.accountData.userName,
                 "userId": req.content.user.id,
             }
             res.status(HTTP_STATUSES.OK200).send(user)

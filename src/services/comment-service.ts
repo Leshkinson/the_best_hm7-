@@ -8,7 +8,7 @@ export const commentService = {
 
     async getCommentById(id: string): Promise<CommentResponseType | null> {
         const filter = {id}
-        const comment = await commentRepository.getCommentById(filter)
+        const comment = await commentRepository.getCommentByFilter(filter)
         if (comment) {
             return commentModels(comment) as CommentResponseType
         }

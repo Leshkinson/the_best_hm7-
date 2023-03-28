@@ -1,7 +1,6 @@
 import {
     QueryForUsersType,
     ResponseTypeWithPages, UserFromDBType,
-    UserResponseFromDBType,
     UserResponseType
 } from "../types/types";
 import {getSortSkipLimit} from "../utils/getSortSkipLimit";
@@ -18,9 +17,13 @@ import {v4 as uuidv4} from "uuid";
 export const userService = {
 
     async getAllUsers(query: QueryForUsersType): Promise<ResponseTypeWithPages<UserResponseType>> {
-        const {pageNumber, pageSize, login, email} = query
+        const {pageNumber, pageSize, userName, email} = query
         const [sort, skip, limit] = await getSortSkipLimit(query)
-        const filter: any = getFilter({email, login}, true)
+        const filter: any = getFilter({
+            "accountData.email": email,
+            "accountData.userName": userName
+        }, true)
+
         const totalCount = await userRepository.getTotalCount(filter)
         const users = await userRepository.getAllUsers(filter, sort as Sort, +skip, +limit)
         return {
@@ -32,18 +35,18 @@ export const userService = {
         }
     },
 
-    async getUserById(id: string): Promise<UserResponseFromDBType | null> {
+    async getUserById(id: string): Promise<UserFromDBType | null> {
         const filter = {id}
-        return await userRepository.getUserById(filter)
+        return await userRepository.getUserByFilter(filter)
     },
 
-    async getUserByLoginOrEmail(loginOrEmail: string, email?: string): Promise<UserResponseFromDBType | null> {
+    async getUserByLoginOrEmail(loginOrEmail: string, email?: string): Promise<UserFromDBType | null> {
         const filter: any = getFilter({
             "accountData.userName": loginOrEmail,
             "accountData.email": email || loginOrEmail
         })
 
-        return await userRepository.getUserByLoginOrEmail(filter)
+        return await userRepository.getUserByFilter(filter)
     },
 
     async createUser(user: any): Promise<UserResponseType> {
@@ -51,7 +54,7 @@ export const userService = {
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(user.password, salt)
         const generatedCode = uuidv4()
-        const createDate  =  new Date().toISOString()
+        const createDate = new Date().toISOString()
         const newUser: UserFromDBType = {
             id,
             accountData: {

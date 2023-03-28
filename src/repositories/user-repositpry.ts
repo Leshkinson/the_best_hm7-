@@ -1,22 +1,14 @@
 import {userCollections} from "../../mongoDB";
-import {UserResponseFromDBType} from "../types/types";
+import {UserFromDBType, UserResponseFromDBType} from "../types/types";
 
 
 export const userRepository = {
 
-    async getAllUsers(filter: any, sort: any, skip: any, limit: any): Promise<UserResponseFromDBType[]> {
+    async getAllUsers(filter: any, sort: any, skip: any, limit: any): Promise<UserFromDBType[]> {
         return await userCollections.find(filter).sort(sort).skip(skip).limit(limit).toArray()
     },
 
-    async getUserById(filter: { id: string }): Promise<UserResponseFromDBType | null> {
-        return await userCollections.findOne(filter)
-    },
-
-    async getUserByLoginOrEmail(filter: any): Promise<UserResponseFromDBType | null> {
-        return await userCollections.findOne(filter)
-    },
-
-    async getUserByConfirmationCode(filter: any){
+    async getUserByFilter(filter: any): Promise<UserFromDBType | null> {
         return await userCollections.findOne(filter)
     },
 
